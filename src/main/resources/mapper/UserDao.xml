@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhanglugao.dao.UserDao">
+
+	 <resultMap id="UserResultMap" type="com.zhanglugao.vo.UserInfo">
+        <id property="id" column="id" />
+        <result property="name" column="name" />    
+        <result property="nickName" column="nick_name" />    
+        <result property="picture" column="picture" />    
+        <result property="mobile" column="mobile" />    
+        <result property="email" column="email" />    
+        <result property="password" column="password" />    
+        <result property="realName" column="real_name" />    
+    </resultMap>
+    
+    <!--根据主键查询-->
+	<select id="findById" resultMap="UserResultMap">
+		select id,name,nick_name,picture,mobile,email,password,real_name from user where id=#{id}
+        
+	</select>
+    
+    <!--插入-->
+	 <insert id="insert" parameterType="com.zhanglugao.vo.UserInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    	INSERT INTO user
+        (name,nick_name,picture,mobile,email,password,real_name) 
+		values(#{name},#{nickName},#{picture},#{mobile},#{email},#{password},#{realName})
+    </insert>
+
+    
+    <!--根据传入的map参数查询 并分页-->
+    <select id="findByParamForPage" resultMap="UserResultMap" >
+		select id,name,nick_name,picture,mobile,email,password,real_name from user
+		where 1=1
+           <if test="obj.search.name!=null"> AND name = #{obj.search.name}</if>
+           <if test="obj.search.nickName!=null"> AND nick_name = #{obj.search.nickName}</if>
+           <if test="obj.search.picture!=null"> AND picture = #{obj.search.picture}</if>
+           <if test="obj.search.mobile!=null"> AND mobile = #{obj.search.mobile}</if>
+           <if test="obj.search.email!=null"> AND email = #{obj.search.email}</if>
+           <if test="obj.search.password!=null"> AND password = #{obj.search.password}</if>
+           <if test="obj.search.realName!=null"> AND real_name = #{obj.search.realName}</if>
+
+        <if test="obj.orderField!=null and obj.orderType!=null"> order by ${obj.orderField} ${obj.orderType}</if>
+	</select>
+    
+     <!--根据传入的实体参数查询-->
+    <select id="findByParam" resultMap="UserResultMap" >
+		select id,name,nick_name,picture,mobile,email,password,real_name from user
+		where 1=1
+           <if test="obj.name!=null"> AND name = #{obj.name}</if>
+           <if test="obj.nickName!=null"> AND nick_name = #{obj.nickName}</if>
+           <if test="obj.picture!=null"> AND picture = #{obj.picture}</if>
+           <if test="obj.mobile!=null"> AND mobile = #{obj.mobile}</if>
+           <if test="obj.email!=null"> AND email = #{obj.email}</if>
+           <if test="obj.password!=null"> AND password = #{obj.password}</if>
+           <if test="obj.realName!=null"> AND real_name = #{obj.realName}</if>
+
+	</select>
+    
+    <!--根据主键进行删除-->
+	<delete id="deleteById"  >
+    	delete from user where id=#{id}
+        <if test="versionId!=null"> AND version = #{versionId}</if>
+    </delete>
+    
+    <!--根据实体进行更新-->
+	<update id="update" >
+    	update user 
+        <trim prefix="SET" suffixOverrides=",">
+           <if test="obj.name!=null">name=#{obj.name},</if>
+           <if test="obj.nickName!=null">nick_name=#{obj.nickName},</if>
+           <if test="obj.picture!=null">picture=#{obj.picture},</if>
+           <if test="obj.mobile!=null">mobile=#{obj.mobile},</if>
+           <if test="obj.email!=null">email=#{obj.email},</if>
+           <if test="obj.password!=null">password=#{obj.password},</if>
+           <if test="obj.realName!=null">real_name=#{obj.realName},</if>  
+        </trim>
+		where id=#{obj.id} 
+        <if test="versionId!=null"> AND version = #{versionId}</if>
+    </update> 
+	<!--CustomBegin***--><!--CustomEnd*****-->
+</mapper>

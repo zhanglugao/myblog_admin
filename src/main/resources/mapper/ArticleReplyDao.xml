@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhanglugao.dao.ArticleReplyDao">
+
+	 <resultMap id="ArticleReplyResultMap" type="com.zhanglugao.vo.ArticleReplyInfo">
+        <id property="id" column="id" />
+        <result property="articleId" column="article_id" />    
+        <result property="sort" column="sort" />    
+        <result property="replyId" column="reply_id" />    
+        <result property="createUser" column="create_user" />    
+        <result property="gmtCreate" column="gmt_create" />    
+        <result property="viewTimes" column="view_times" />    
+        <result property="replyTimes" column="reply_times" />    
+        <result property="upvoteTimes" column="upvote_times" />    
+        <result property="steponTimes" column="stepon_times" />    
+        <result property="content" column="content" />    
+    </resultMap>
+    
+    <!--根据主键查询-->
+	<select id="findById" resultMap="ArticleReplyResultMap">
+		select id,article_id,sort,reply_id,create_user,gmt_create,view_times,reply_times,upvote_times,stepon_times,content from article_reply where id=#{id}
+        
+	</select>
+    
+    <!--插入-->
+	 <insert id="insert" parameterType="com.zhanglugao.vo.ArticleReplyInfo" >
+    	INSERT INTO article_reply
+        (id,article_id,sort,reply_id,create_user,gmt_create,view_times,reply_times,upvote_times,stepon_times,content) 
+		values(#{id},#{articleId},#{sort},#{replyId},#{createUser},#{gmtCreate},#{viewTimes},#{replyTimes},#{upvoteTimes},#{steponTimes},#{content})
+    </insert>
+
+    
+    <!--根据传入的map参数查询 并分页-->
+    <select id="findByParamForPage" resultMap="ArticleReplyResultMap" >
+		select id,article_id,sort,reply_id,create_user,gmt_create,view_times,reply_times,upvote_times,stepon_times,content from article_reply
+		where 1=1
+           <if test="obj.search.id!=null"> AND id = #{obj.search.id}</if>
+           <if test="obj.search.articleId!=null"> AND article_id = #{obj.search.articleId}</if>
+           <if test="obj.search.sort!=null"> AND sort = #{obj.search.sort}</if>
+           <if test="obj.search.replyId!=null"> AND reply_id = #{obj.search.replyId}</if>
+           <if test="obj.search.createUser!=null"> AND create_user = #{obj.search.createUser}</if>
+           <if test="obj.search.gmtCreate!=null"> AND gmt_create = #{obj.search.gmtCreate}</if>
+           <if test="obj.search.viewTimes!=null"> AND view_times = #{obj.search.viewTimes}</if>
+           <if test="obj.search.replyTimes!=null"> AND reply_times = #{obj.search.replyTimes}</if>
+           <if test="obj.search.upvoteTimes!=null"> AND upvote_times = #{obj.search.upvoteTimes}</if>
+           <if test="obj.search.steponTimes!=null"> AND stepon_times = #{obj.search.steponTimes}</if>
+           <if test="obj.search.content!=null"> AND content = #{obj.search.content}</if>
+
+        <if test="obj.orderField!=null and obj.orderType!=null"> order by ${obj.orderField} ${obj.orderType}</if>
+	</select>
+    
+     <!--根据传入的实体参数查询-->
+    <select id="findByParam" resultMap="ArticleReplyResultMap" >
+		select id,article_id,sort,reply_id,create_user,gmt_create,view_times,reply_times,upvote_times,stepon_times,content from article_reply
+		where 1=1
+           <if test="obj.id!=null"> AND id = #{obj.id}</if>
+           <if test="obj.articleId!=null"> AND article_id = #{obj.articleId}</if>
+           <if test="obj.sort!=null"> AND sort = #{obj.sort}</if>
+           <if test="obj.replyId!=null"> AND reply_id = #{obj.replyId}</if>
+           <if test="obj.createUser!=null"> AND create_user = #{obj.createUser}</if>
+           <if test="obj.gmtCreate!=null"> AND gmt_create = #{obj.gmtCreate}</if>
+           <if test="obj.viewTimes!=null"> AND view_times = #{obj.viewTimes}</if>
+           <if test="obj.replyTimes!=null"> AND reply_times = #{obj.replyTimes}</if>
+           <if test="obj.upvoteTimes!=null"> AND upvote_times = #{obj.upvoteTimes}</if>
+           <if test="obj.steponTimes!=null"> AND stepon_times = #{obj.steponTimes}</if>
+           <if test="obj.content!=null"> AND content = #{obj.content}</if>
+
+	</select>
+    
+    <!--根据主键进行删除-->
+	<delete id="deleteById"  >
+    	delete from article_reply where id=#{id}
+        <if test="versionId!=null"> AND version = #{versionId}</if>
+    </delete>
+    
+    <!--根据实体进行更新-->
+	<update id="update" >
+    	update article_reply 
+        <trim prefix="SET" suffixOverrides=",">
+           <if test="obj.id!=null">id=#{obj.id},</if>
+           <if test="obj.articleId!=null">article_id=#{obj.articleId},</if>
+           <if test="obj.sort!=null">sort=#{obj.sort},</if>
+           <if test="obj.replyId!=null">reply_id=#{obj.replyId},</if>
+           <if test="obj.createUser!=null">create_user=#{obj.createUser},</if>
+           <if test="obj.gmtCreate!=null">gmt_create=#{obj.gmtCreate},</if>
+           <if test="obj.viewTimes!=null">view_times=#{obj.viewTimes},</if>
+           <if test="obj.replyTimes!=null">reply_times=#{obj.replyTimes},</if>
+           <if test="obj.upvoteTimes!=null">upvote_times=#{obj.upvoteTimes},</if>
+           <if test="obj.steponTimes!=null">stepon_times=#{obj.steponTimes},</if>
+           <if test="obj.content!=null">content=#{obj.content},</if>  
+        </trim>
+		where id=#{obj.id} 
+        <if test="versionId!=null"> AND version = #{versionId}</if>
+    </update> 
+	<!--CustomBegin***--><!--CustomEnd*****-->
+</mapper>
